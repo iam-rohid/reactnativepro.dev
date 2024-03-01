@@ -29,6 +29,10 @@ export default function NavBar() {
         href: "/tutorials",
       },
       {
+        label: "Tags",
+        href: "/tags",
+      },
+      {
         label: "About",
         href: "/about",
       },

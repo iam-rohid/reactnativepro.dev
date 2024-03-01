@@ -8,11 +8,20 @@ const _getTagSlug = (doc: TagType) => {
 export const Tag = defineDocumentType(() => ({
   name: "Tag",
   contentType: "data",
-  filePathPattern: "tags/**/*.json",
+  filePathPattern: "tags/*.json",
   fields: {
     name: {
       type: "string",
       required: true,
+    },
+    description: {
+      type: "string",
+    },
+    bgColor: {
+      type: "string",
+    },
+    fgColor: {
+      type: "string",
     },
   },
   computedFields: {

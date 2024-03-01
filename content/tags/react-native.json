@@ -1,3 +1,5 @@
 {
-  "name": "React Native"
+  "name": "React Native",
+  "bgColor": "#61DAFB",
+  "fgColor": "#282C34"
 }

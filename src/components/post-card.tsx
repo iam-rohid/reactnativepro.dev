@@ -13,15 +13,18 @@ export default function PostCard({ post }: { post: Post }) {
         width={post.coverImage.width}
         height={post.coverImage.height}
         alt={post.coverImage.alt}
-        className="aspect-video"
+        className="aspect-[2] border-b object-cover"
       />
       <div className="p-4">
-        <h3 className="line-clamp-2 text-lg font-semibold leading-tight">
-          {post.title}
-        </h3>
+        <h3 className="line-clamp-2 text-xl font-semibold">{post.title}</h3>
         <p className="mt-2 line-clamp-3 leading-normal text-muted-foreground">
           {post.description}
         </p>
+        <div className="mt-2 flex flex-wrap gap-2 text-muted-foreground">
+          {post.tags.map((tag) => (
+            <p key={tag}>#{tag}</p>
+          ))}
+        </div>
       </div>
     </Link>
   );

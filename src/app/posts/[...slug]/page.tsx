@@ -101,7 +101,7 @@ export default function PostPage({ params }: Props) {
           alt={post.coverImage.alt}
           width={post.coverImage.width}
           height={post.coverImage.height}
-          className="my-8 aspect-video w-full rounded-xl border"
+          className="my-8 w-full rounded-xl border object-cover"
         />
         <article className="prose my-12 max-w-none dark:prose-invert md:prose-lg">
           <Content />

@@ -9,7 +9,7 @@ const _getAuthorSlug = (doc: AuthorType) => {
 export const Author = defineDocumentType(() => ({
   name: "Author",
   contentType: "data",
-  filePathPattern: "authors/**/*.json",
+  filePathPattern: "authors/*.json",
   fields: {
     name: {
       type: "string",
