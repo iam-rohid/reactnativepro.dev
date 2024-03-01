@@ -4,6 +4,8 @@ export const SITE_NAME = "ReactNativePro.dev";
 export const SITE_URL = "https://reactnativepro.dev";
 export const TWITTER_HANDLE = "rohiddev";
 
+export const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA_TRACKING_ID ?? "";
+
 export const BASE_METADATA: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: `${SITE_NAME} - Let's Learn React Native`,

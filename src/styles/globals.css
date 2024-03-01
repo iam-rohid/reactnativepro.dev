@@ -78,10 +78,8 @@
   .container {
     @apply px-4 md:px-8;
   }
-  .prose {
-    pre {
-      @apply rounded-lg border bg-neutral-900 p-4;
-      color-scheme: dark;
-    }
+  .prose pre {
+    @apply rounded-lg border bg-neutral-900 p-4;
+    color-scheme: dark;
   }
 }

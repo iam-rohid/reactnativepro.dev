@@ -5,7 +5,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import NavBar from "@/components/nav-bar";
 import Footer from "@/components/footer";
 import { cn } from "@/utils";
-import { BASE_METADATA } from "@/constants";
+import { BASE_METADATA, GA_TRACKING_ID } from "@/constants";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,6 +30,7 @@ export default function RootLayout({
           {children}
           <Footer />
         </ThemeProvider>
+        <GoogleAnalytics gaId={GA_TRACKING_ID} />
       </body>
     </html>
   );

@@ -14,6 +14,7 @@ export default function PostCard({ post }: { post: Post }) {
         height={post.coverImage.height}
         alt={post.coverImage.alt}
         className="aspect-[2] border-b object-cover"
+        priority
       />
       <div className="p-4">
         <h3 className="line-clamp-2 text-xl font-semibold">{post.title}</h3>
