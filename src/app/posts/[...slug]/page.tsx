@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ChevronLeftIcon, TwitterLogoIcon } from "@radix-ui/react-icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { UserIcon } from "lucide-react";
+import { ArrowLeftIcon, UserIcon } from "lucide-react";
 import { Metadata, ResolvingMetadata } from "next";
 import { SITE_NAME, SITE_URL } from "@/constants";
 
@@ -94,10 +94,12 @@ export default function PostPage({ params }: Props) {
   const tags = getTags(post.tags);
 
   return (
-    <main>
-      <div className="container my-16 max-w-screen-md">
-        <header className="my-8">
-          <h1 className="text-3xl font-bold md:text-5xl">{post.title}</h1>
+    <main className="flex-1">
+      <div className="container my-8 max-w-screen-md md:my-12">
+        <header>
+          <h1 className="text-3xl font-bold tracking-tight md:text-5xl md:leading-[1.1]">
+            {post.title}
+          </h1>
           <p className="mt-4 text-muted-foreground md:text-lg">
             {format(post.publishedAt, "MMM dd, yyyy")}
             {" · "}
@@ -109,9 +111,9 @@ export default function PostPage({ params }: Props) {
           alt={post.coverImage.alt}
           width={post.coverImage.width}
           height={post.coverImage.height}
-          className="aspect-video w-full rounded-xl border"
+          className="my-8 aspect-video w-full rounded-xl border"
         />
-        <article className="prose dark:prose-invert md:prose-lg my-12 max-w-none">
+        <article className="prose my-12 max-w-none dark:prose-invert md:prose-lg">
           <Content />
         </article>
         <section id="tags">
@@ -145,7 +147,7 @@ export default function PostPage({ params }: Props) {
                     </AvatarFallback>
                   </Link>
                 </Avatar>
-                <div className="flex-1 overflow-hidden">
+                <div className="max-w-full flex-1">
                   <Link
                     href={author.url}
                     className="font-medium hover:underline"
@@ -156,17 +158,17 @@ export default function PostPage({ params }: Props) {
                     href={`https://twitter.com/${author.twitterHandle}`}
                     className="flex items-center text-muted-foreground hover:text-accent-foreground hover:underline"
                   >
-                    <TwitterLogoIcon className="h-4 w-4 flex-shrink-0" />
-                    <p className="truncate">/{author.twitterHandle}</p>
+                    <TwitterLogoIcon className="h-4 w-4 flex-shrink-0" />/
+                    <p className="truncate">{author.twitterHandle}</p>
                   </Link>
                 </div>
               </div>
             ))}
           </div>
         </section>
-        <Button asChild className="mt-8" variant="secondary">
+        <Button asChild className="-ml-4 mt-8" variant="link">
           <Link href="/">
-            <ChevronLeftIcon className="-ml-1 mr-2 h-5 w-5" />
+            <ArrowLeftIcon className="-ml-1 mr-2 h-5 w-5" />
             Back to Home
           </Link>
         </Button>

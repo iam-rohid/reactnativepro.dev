@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="container">
         <div className="grid gap-x-4 gap-y-8 py-8 md:grid-cols-2 md:py-16 lg:grid-cols-3">
           <div>
-            <Link href="/" className="text-lg font-semibold">
+            <Link href="/" className="font-semibold">
               ReactNativePro.Dev
             </Link>
           </div>
@@ -48,7 +48,7 @@ export default function Footer() {
             </p>
             <div className="mt-4">
               <p className="text-muted-foreground">
-                Get the latest Reactiive content right in your inbox
+                Get all latest React Native content right in your inbox
               </p>
               <form className="mt-2 flex gap-4">
                 <Input className="flex-1" placeholder="john@example.com" />

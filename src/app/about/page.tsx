@@ -1,3 +1,3 @@
 export default function AboutPage() {
-  return <div>AboutPage</div>;
+  return <main className="flex-1">Under development...</main>;
 }

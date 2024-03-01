@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 import { cn } from "@/utils";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
-import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+import { HamburgerMenuIcon, TwitterLogoIcon } from "@radix-ui/react-icons";
 import {
   Drawer,
   DrawerClose,
@@ -13,6 +13,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { ModeToggle } from "./mode-toggle";
+import { TWITTER_HANDLE } from "@/constants";
 
 export default function NavBar() {
   const pathname = usePathname();
@@ -24,17 +25,8 @@ export default function NavBar() {
   }[] = useMemo(
     () => [
       {
-        label: "Home",
-        href: "/",
-        exact: true,
-      },
-      {
         label: "Tutorials",
         href: "/tutorials",
-      },
-      {
-        label: "Petreon",
-        href: "/petreon",
       },
       {
         label: "About",
@@ -44,9 +36,9 @@ export default function NavBar() {
     [],
   );
   return (
-    <header className="sticky top-0 z-10 bg-card">
+    <header className="sticky top-0 z-10 bg-card/70 backdrop-blur-lg">
       <nav className="container flex h-16 items-center gap-8">
-        <Link href="/" className="text-lg font-semibold">
+        <Link href="/" className="font-semibold">
           ReactNativePro.Dev
         </Link>
         <div className="flex items-center justify-end gap-6 max-md:hidden">
@@ -70,11 +62,16 @@ export default function NavBar() {
             );
           })}
         </div>
-        <div className="flex flex-1 items-center justify-end gap-4">
+        <div className="flex flex-1 items-center justify-end gap-2">
+          <Button variant="ghost" size="icon" asChild>
+            <Link href={`https://twitter.com/${TWITTER_HANDLE}`}>
+              <TwitterLogoIcon className="h-5 w-5" />
+            </Link>
+          </Button>
           <ModeToggle />
           <Drawer>
             <DrawerTrigger asChild>
-              <Button size="icon" variant="outline" className="md:hidden">
+              <Button size="icon" variant="ghost" className="md:hidden">
                 <HamburgerMenuIcon className="h-5 w-5" />
               </Button>
             </DrawerTrigger>
