@@ -16,6 +16,148 @@ tags:
   - splashscreen
 ---
 
-Hi there
+If you have previously integrated Firebase Analytics into a React Native project with React Navigation, you may be familiar with tracking screen changes by listening to the onStateChange callback of the NavigationContainer component. However, in Expo Router, you do not have direct access to the NavigationContainer component. Therefore, the process is slightly different in Expo Router. In this post, I will show you how to achieve this.
 
-In this article we will take a look how we can change app's splashscreen based on the device prefrence.
+First, let's see how we had to do it before in React Navigation. Here is a code example from the [react-native-firebase](https://rnfirebase.io/) website.
+
+```jsx
+import analytics from "@react-native-firebase/analytics";
+import { NavigationContainer } from "@react-navigation/native";
+
+const App = () => {
+  const routeNameRef = React.useRef();
+  const navigationRef = React.useRef();
+  return (
+    <NavigationContainer
+      ref={navigationRef}
+      onReady={() => {
+        routeNameRef.current = navigationRef.current.getCurrentRoute().name;
+      }}
+      onStateChange={async () => {
+        const previousRouteName = routeNameRef.current;
+        const currentRouteName = navigationRef.current.getCurrentRoute().name;
+
+        if (previousRouteName !== currentRouteName) {
+          await analytics().logScreenView({
+            screen_name: currentRouteName,
+            screen_class: currentRouteName,
+          });
+        }
+        routeNameRef.current = currentRouteName;
+      }}
+    >
+      {/* ... */}
+    </NavigationContainer>
+  );
+};
+
+export default App;
+```
+
+If you haven't done it before, tracking screen changes and logging them to Firebase Analytics might seem complicated. However, the new method makes it much easier. So, let's get started!
+
+## Install Expo Router
+
+Before we begin, let's create a new Expo project with Expo Router. The latest version of Expo (49) already includes Expo Router. You can run the command below to create a new project, or you can follow the [quick start guide](https://docs.expo.dev/router/installation/#quick-start) in the Expo documentation.
+
+```bash
+npx create-expo-app@latest --template tabs@49
+```
+
+## Install Firebase
+
+Now that we have an Expo project, let's install Firebase. You can follow the official guide of [React Native Firebase](https://rnfirebase.io/#expo), or you can follow the steps below.
+
+### Step 1 - Install Firebase
+
+```bash
+npx expo install @react-native-firebase/app
+```
+
+After installing Firebase, you need to update your `app.json` file as shown below. Essentially, you need to add the `google-services.json` file for Android and the `GoogleService-Info.plist` file for iOS. Additionally, you need to include `@react-native-firebase/app` as a plugin.
+
+```json
+// app.json
+{
+  "expo": {
+    // ...
+    "android": {
+      "googleServicesFile": "./google-services.json"
+      // ...
+    },
+    "ios": {
+      "googleServicesFile": "./GoogleService-Info.plist"
+      // ...
+    },
+    "plugins": [
+      "@react-native-firebase/app"
+      // ...
+    ]
+  }
+}
+```
+
+Also, obtain the `google-services.json` and `GoogleService-Info.plist` files from your Firebase console and add them to the root of your project, where the `app.json` file is located.
+
+### Step 2 - Prebuild
+
+By default, Expo runs your project inside the Expo Go app, which is great for quick prototyping. However, you cannot install native modules to your project in this setup. To do so, you need to perform a prebuild. You can find more information about prebuild [here](https://docs.expo.dev/workflow/prebuild/). Let's run the following command to perform a prebuild.
+
+```bash
+npx expo prebuild
+```
+
+This command will generate an iOS and Android folder in the root directory.
+
+### Step 3 - Install Firebase Analytics
+
+We have already installed and configured the core Firebase app. Now let's proceed with installing Firebase Analytics. You can refer to the [official guide](https://rnfirebase.io/analytics/usage) or run the following command.
+
+```bash
+npx expo install @react-native-firebase/analytics
+```
+
+### Step 4 - Log Screen View
+
+Congratulations! So far, we have integrated Firebase and Firebase Analytics into our app. If you run your app now, it should log events to Firebase. However, there is a problem. By default, Firebase Analytics does not track screen changes or navigations. Let's see how we can listen for screen changes and log them accordingly.
+
+In our root `_layout.tsx` file, make the following changes.
+
+```jsx
+// app/_layout.tsx
+import analytics from "@react-native-firebase/analytics";
+import { Stack, usePathname } from "expo-router";
+import { useEffect } from "react";
+
+export { ErrorBoundary } from "expo-router";
+
+export default function RootLayout() {
+	const pathname = usePathname();
+
+  useEffect(() => {
+    const logScreenView = async () => {
+      try {
+        await analytics().logScreenView({
+          screen_name: pathname,
+          screen_class: pathname,
+        });
+      } catch (err: any) {
+        console.error(err);
+      }
+    };
+    logScreenView();
+  }, [pathname]);
+
+  return (
+		<OtherProviders>
+			<Stack />
+		<OtherProviders>
+	);
+}
+```
+
+Here we are using the `usePathname` hook to listen for every path change in our app. This `pathname` represents the current path of the screen. Every time the user navigates between screens, this pathname will be changed, triggering the `useEffect` because we have added `pathname` to the dependency array.
+
+And that's it! You should now see screen view logs in your Firebase Analytics dashboard. If you don't, please remember that it may take some time for events to appear for the first time.
+
+I hope this article helps you with the issue you are facing. Thank you for taking the time to read it.

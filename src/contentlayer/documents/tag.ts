@@ -22,7 +22,7 @@ export const Tag = defineDocumentType(() => ({
     },
     url: {
       type: "string",
-      resolve: (doc) => `/authors/${_getTagSlug(doc)}`,
+      resolve: (doc) => `/tags/${_getTagSlug(doc)}`,
     },
   },
 }));

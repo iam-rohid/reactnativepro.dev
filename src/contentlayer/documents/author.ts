@@ -19,7 +19,7 @@ export const Author = defineDocumentType(() => ({
       type: "string",
       required: true,
     },
-    avatarUrl: {
+    avatar: {
       type: "nested",
       of: Image,
       required: true,

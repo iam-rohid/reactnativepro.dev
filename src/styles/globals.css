@@ -1,3 +1,5 @@
+@import url("./hljs-github-dark.css");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -75,5 +77,11 @@
   }
   .container {
     @apply px-4 md:px-8;
+  }
+  .prose {
+    pre {
+      @apply rounded-lg border bg-neutral-900 p-4;
+      color-scheme: dark;
+    }
   }
 }
