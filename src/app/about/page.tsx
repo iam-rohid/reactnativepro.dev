@@ -11,5 +11,14 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
-  return <main className="flex-1">Under development...</main>;
+  return (
+    <main className="flex-1">
+      <div className="container my-8 md:my-12">
+        <h2 className="text-3xl font-bold md:text-5xl md:leading-tight">
+          About
+        </h2>
+        <p className="mt-8 text-muted-foreground">Under development</p>
+      </div>
+    </main>
+  );
 }
