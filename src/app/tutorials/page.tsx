@@ -1,6 +1,17 @@
 import PostCard from "@/components/post-card";
+import { BASE_METADATA, SITE_NAME, SITE_URL } from "@/constants";
 import { allPosts } from "contentlayer/generated";
 import { compareDesc } from "date-fns";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  ...BASE_METADATA,
+  title: `Tutorials - ${SITE_NAME}`,
+  openGraph: {
+    ...BASE_METADATA.openGraph,
+    url: `${SITE_URL}/tutorials`,
+  },
+};
 
 export default function TutorialsPage() {
   const posts = allPosts.sort((a, b) =>

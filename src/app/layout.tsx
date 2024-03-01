@@ -5,13 +5,11 @@ import { ThemeProvider } from "@/components/theme-provider";
 import NavBar from "@/components/nav-bar";
 import Footer from "@/components/footer";
 import { cn } from "@/utils";
+import { BASE_METADATA } from "@/constants";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "React Native Pro",
-  description: "Learn react native.",
-};
+export const metadata: Metadata = BASE_METADATA;
 
 export default function RootLayout({
   children,

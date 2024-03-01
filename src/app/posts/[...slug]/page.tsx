@@ -11,11 +11,11 @@ import { getMDXComponent } from "next-contentlayer/hooks";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ChevronLeftIcon, TwitterLogoIcon } from "@radix-ui/react-icons";
+import { TwitterLogoIcon } from "@radix-ui/react-icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ArrowLeftIcon, UserIcon } from "lucide-react";
-import { Metadata, ResolvingMetadata } from "next";
-import { SITE_NAME, SITE_URL } from "@/constants";
+import { Metadata } from "next";
+import { BASE_METADATA, SITE_URL } from "@/constants";
 
 type Props = { params: { slug: string[] } };
 
@@ -39,10 +39,7 @@ export const generateStaticParams = async () => {
   return allPosts.map((post) => ({ slug: post.slug.split("/") }));
 };
 
-export async function generateMetadata(
-  { params }: Props,
-  parent: ResolvingMetadata,
-): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = getPostBySlug(params.slug);
 
   if (!post) {
@@ -50,34 +47,27 @@ export async function generateMetadata(
   }
 
   const authors = getAuthors(post.authors);
-  const previousImages = (await parent).openGraph?.images || [];
 
   return {
+    ...BASE_METADATA,
     title: post.title,
     description: post.description,
     authors: authors.map((author) => ({
       name: author.name,
       url: `https://twitter.com/${author.twitterHandle}`,
     })),
-    publisher: SITE_NAME,
-    creator: SITE_NAME,
     keywords: post.tags.map((tag) => tag.replaceAll("-", " ")),
-    robots: {
-      index: true,
-      follow: true,
-    },
     openGraph: {
+      ...BASE_METADATA.openGraph,
       type: "article",
       publishedTime: post.publishedAt,
       modifiedTime: post.modifiedAt,
       url: `${SITE_URL}${post.url}`,
-      siteName: SITE_NAME,
-      images: [post.coverImage.url, ...previousImages],
+      images: [post.coverImage.url],
     },
     twitter: {
-      site: "@ReactNativePro",
+      ...BASE_METADATA.twitter,
       creator: `@${authors[0].twitterHandle}`,
-      card: "summary_large_image",
     },
   };
 }
