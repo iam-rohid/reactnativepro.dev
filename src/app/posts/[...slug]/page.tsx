@@ -11,9 +11,8 @@ import { getMDXComponent } from "next-contentlayer/hooks";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { TwitterLogoIcon } from "@radix-ui/react-icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ArrowLeftIcon, UserIcon } from "lucide-react";
+import { UserIcon } from "lucide-react";
 import { Metadata } from "next";
 import { BASE_METADATA, SITE_URL } from "@/constants";
 
@@ -120,48 +119,32 @@ export default function PostPage({ params }: Props) {
           <p className="uppercase text-muted-foreground">Authors</p>
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             {authors.map((author) => (
-              <div className="flex items-center gap-2" key={author._id}>
-                <Avatar asChild>
-                  <Link
-                    href={author.url}
-                    className="flex-shrink-0 transition-opacity hover:opacity-80"
-                  >
-                    <AvatarImage
-                      src={author.avatar.url}
-                      width={author.avatar.width}
-                      height={author.avatar.height}
-                      alt={author.avatar.alt}
-                    />
-                    <AvatarFallback>
-                      <UserIcon className="h-6 w-6" />
-                    </AvatarFallback>
-                  </Link>
+              <Link href={author.url} className="flex gap-4" key={author._id}>
+                <Avatar className="h-12 w-12 hover:opacity-80">
+                  <AvatarImage
+                    src={author.avatar.url}
+                    width={author.avatar.width}
+                    height={author.avatar.height}
+                    alt={author.avatar.alt}
+                  />
+                  <AvatarFallback>
+                    <UserIcon className="h-6 w-6" />
+                  </AvatarFallback>
                 </Avatar>
                 <div className="max-w-full flex-1">
-                  <Link
-                    href={author.url}
-                    className="font-medium hover:underline"
-                  >
-                    <p className="truncate">{author.name}</p>
-                  </Link>
-                  <Link
-                    href={`https://twitter.com/${author.twitterHandle}`}
-                    className="flex items-center text-muted-foreground hover:text-accent-foreground hover:underline"
-                  >
-                    <TwitterLogoIcon className="h-4 w-4 flex-shrink-0" />/
-                    <p className="truncate">{author.twitterHandle}</p>
-                  </Link>
+                  <p className="truncate font-medium hover:underline">
+                    {author.name}
+                  </p>
+                  {author.bio && (
+                    <p className="line-clamp-3 text-muted-foreground">
+                      {author.bio}
+                    </p>
+                  )}
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </section>
-        <Button asChild className="-ml-4 mt-8" variant="link">
-          <Link href="/">
-            <ArrowLeftIcon className="-ml-1 mr-2 h-5 w-5" />
-            Back to Home
-          </Link>
-        </Button>
       </div>
     </main>
   );

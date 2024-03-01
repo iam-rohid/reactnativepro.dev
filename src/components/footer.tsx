@@ -1,15 +1,19 @@
 import Link from "next/link";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { SITE_NAME, TWITTER_HANDLE } from "@/constants";
 
 export default function Footer() {
   return (
-    <footer className="border-t">
+    <footer className="border-t bg-card">
       <div className="container">
         <div className="grid gap-x-4 gap-y-8 py-8 md:grid-cols-2 md:py-16 lg:grid-cols-3">
           <div>
-            <Link href="/" className="font-semibold">
-              ReactNativePro.Dev
+            <Link
+              href="/"
+              className="font-semibold transition-opacity hover:opacity-90"
+            >
+              {SITE_NAME}
             </Link>
           </div>
           <div>
@@ -20,11 +24,7 @@ export default function Footer() {
               {[
                 {
                   label: "Twitter",
-                  href: "https://twitter.com/reactnativepro",
-                },
-                {
-                  label: "Instagram",
-                  href: "https://instagram.com/reactnativepro",
+                  href: `https://twitter.com/${TWITTER_HANDLE}`,
                 },
                 {
                   label: "Email",

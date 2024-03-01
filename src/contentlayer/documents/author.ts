@@ -15,9 +15,20 @@ export const Author = defineDocumentType(() => ({
       type: "string",
       required: true,
     },
+    bio: {
+      type: "string",
+    },
+    country: {
+      type: "string",
+    },
     twitterHandle: {
       type: "string",
-      required: true,
+    },
+    linkedInHandle: {
+      type: "string",
+    },
+    website: {
+      type: "string",
     },
     avatar: {
       type: "nested",

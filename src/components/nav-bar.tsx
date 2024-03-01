@@ -13,7 +13,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { ModeToggle } from "./mode-toggle";
-import { TWITTER_HANDLE } from "@/constants";
+import { SITE_NAME, TWITTER_HANDLE } from "@/constants";
 
 export default function NavBar() {
   const pathname = usePathname();
@@ -40,10 +40,13 @@ export default function NavBar() {
     [],
   );
   return (
-    <header className="sticky top-0 z-10 bg-card/70 backdrop-blur-lg">
+    <header className="sticky top-0 z-10 border-b bg-card">
       <nav className="container flex h-16 items-center gap-8">
-        <Link href="/" className="font-semibold">
-          ReactNativePro.Dev
+        <Link
+          href="/"
+          className="font-semibold transition-opacity hover:opacity-90"
+        >
+          {SITE_NAME}
         </Link>
         <div className="flex items-center justify-end gap-6 max-md:hidden">
           {links.map((link) => {
@@ -70,6 +73,7 @@ export default function NavBar() {
           <Button variant="ghost" size="icon" asChild>
             <Link href={`https://twitter.com/${TWITTER_HANDLE}`}>
               <TwitterLogoIcon className="h-5 w-5" />
+              <p className="sr-only">Twitter</p>
             </Link>
           </Button>
           <ModeToggle />
@@ -77,6 +81,7 @@ export default function NavBar() {
             <DrawerTrigger asChild>
               <Button size="icon" variant="ghost" className="md:hidden">
                 <HamburgerMenuIcon className="h-5 w-5" />
+                <p className="sr-only">Menu</p>
               </Button>
             </DrawerTrigger>
             <DrawerContent>

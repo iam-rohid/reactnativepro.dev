@@ -5,6 +5,7 @@ export const SITE_URL = "https://reactnativepro.dev";
 export const TWITTER_HANDLE = "rohiddev";
 
 export const BASE_METADATA: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: `${SITE_NAME} - Let's Learn React Native`,
   description:
     "Ready to Dive into React Native? Let's Start Your Journey to Mastery Together! Explore Free Tutorials and Hands-On Projects for an Engaging Learning Experience!",
