@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { BASE_METADATA, SITE_NAME, SITE_URL } from "@/constants";
+import { isPostPublished } from "@/utils";
 import { allPosts, allTags } from "contentlayer/generated";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -15,12 +16,13 @@ export const metadata: Metadata = {
 
 export default function TagsPage() {
   const tags = allTags
+    .sort((a, b) => a.slug.localeCompare(b.slug))
     .map((tag) => ({
       ...tag,
-      postsCount: allPosts.filter((post) => post.tags.includes(tag.slug))
-        .length,
-    }))
-    .sort((a, b) => a.slug.localeCompare(b.slug));
+      postsCount: allPosts.filter(
+        (post) => isPostPublished(post) && post.tags.includes(tag.slug),
+      ).length,
+    }));
 
   return (
     <main className="flex-1">

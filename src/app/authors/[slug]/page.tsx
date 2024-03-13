@@ -1,9 +1,9 @@
 import PostCard from "@/components/post-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { BASE_METADATA, SITE_NAME, SITE_URL } from "@/constants";
+import { isPostPublished } from "@/utils";
 import { LinkedInLogoIcon, TwitterLogoIcon } from "@radix-ui/react-icons";
 import { allAuthors, allPosts } from "contentlayer/generated";
-import { compareDesc } from "date-fns";
 import { GlobeIcon, UserIcon } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -12,16 +12,12 @@ import pluralize from "pluralize";
 
 type Props = { params: { slug: string } };
 
-const getAuthorBySlug = (slug: string) => {
-  return allAuthors.find((author) => author.slug === slug);
-};
-
 export const generateStaticParams = async () => {
   return allAuthors.map((item) => ({ slug: item.slug }));
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const author = getAuthorBySlug(params.slug);
+  const author = allAuthors.find((author) => author.slug === params.slug);
 
   if (!author) {
     return {};
@@ -39,15 +35,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default function AuthorPage({ params }: Props) {
-  const author = getAuthorBySlug(params.slug);
+  const author = allAuthors.find((author) => author.slug === params.slug);
 
   if (!author) {
     notFound();
   }
 
-  const posts = allPosts
-    .filter((post) => post.authors.includes(params.slug))
-    .sort((a, b) => compareDesc(a.publishedAt, b.publishedAt));
+  const posts = allPosts.filter(
+    (post) => isPostPublished(post) && post.authors.includes(author.slug),
+  );
 
   return (
     <main className="flex-1">

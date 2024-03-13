@@ -1,10 +1,3 @@
-import {
-  Author,
-  Tag,
-  allAuthors,
-  allPosts,
-  allTags,
-} from "contentlayer/generated";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getMDXComponent } from "next-contentlayer/hooks";
@@ -15,37 +8,27 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UserIcon } from "lucide-react";
 import { Metadata } from "next";
 import { BASE_METADATA, SITE_URL } from "@/constants";
+import { allAuthors, allPosts, allTags } from "contentlayer/generated";
+import { isPostPublished } from "@/utils";
 
-type Props = { params: { slug: string[] } };
-
-const getPostBySlug = (slug: string[]) => {
-  return allPosts.find((post) => post.slug === slug.join("/"));
-};
-
-const getAuthors = (authorsSlugs: string[]) => {
-  return authorsSlugs
-    .map((slug) => allAuthors.find((author) => author.slug === slug))
-    .filter((author) => !!author) as Author[];
-};
-
-const getTags = (tagSlugs: string[]) => {
-  return tagSlugs
-    .map((slug) => allTags.find((tag) => tag.slug === slug))
-    .filter((tag) => !!tag) as Tag[];
-};
+type Props = { params: { slug: string } };
 
 export const generateStaticParams = async () => {
-  return allPosts.map((post) => ({ slug: post.slug.split("/") }));
+  return allPosts.filter(isPostPublished).map((post) => ({ slug: post.slug }));
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = getPostBySlug(params.slug);
+  const post = allPosts.find(
+    (post) => isPostPublished(post) && post.slug === params.slug,
+  );
 
   if (!post) {
     return {};
   }
 
-  const authors = getAuthors(post.authors);
+  const authors = allAuthors.filter((author) =>
+    post.authors.includes(author.slug),
+  );
 
   return {
     ...BASE_METADATA,
@@ -55,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       name: author.name,
       url: `https://twitter.com/${author.twitterHandle}`,
     })),
-    keywords: post.tags.map((tag) => tag.replaceAll("-", " ")),
+    keywords: post.tags,
     openGraph: {
       ...BASE_METADATA.openGraph,
       type: "article",
@@ -66,21 +49,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       ...BASE_METADATA.twitter,
-      creator: `@${authors[0].twitterHandle}`,
+      ...(authors.length > 0 && !!authors[0].twitterHandle
+        ? { creator: `@${authors[0].twitterHandle}` }
+        : {}),
     },
   };
 }
 
 export default function PostPage({ params }: Props) {
-  const post = getPostBySlug(params.slug);
+  const post = allPosts.find(
+    (post) => isPostPublished(post) && post.slug === params.slug,
+  );
 
   if (!post) {
     notFound();
   }
 
+  const tags = allTags.filter((tag) => post.tags.includes(tag.slug));
+  const authors = allAuthors.filter((author) =>
+    post.authors.includes(author.slug),
+  );
+
   const Content = getMDXComponent(post.body.code);
-  const authors = getAuthors(post.authors);
-  const tags = getTags(post.tags);
 
   return (
     <main className="flex-1">

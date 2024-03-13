@@ -1,8 +1,8 @@
-import { Post } from "contentlayer/generated";
+import { Post as PostType } from "contentlayer/generated";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function PostCard({ post }: { post: Post }) {
+export default function PostCard({ post }: { post: PostType }) {
   return (
     <Link
       href={post.url}

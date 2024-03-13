@@ -9,7 +9,7 @@ const _getPostSlug = (doc: PostType) => {
 
 export const Post = defineDocumentType(() => ({
   name: "Post",
-  filePathPattern: `posts/**/*.mdx`,
+  filePathPattern: `posts/*.mdx`,
   contentType: "mdx",
   fields: {
     draft: {

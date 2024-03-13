@@ -1,5 +1,6 @@
 import PostCard from "@/components/post-card";
 import { BASE_METADATA, SITE_NAME, SITE_URL } from "@/constants";
+import { isPostPublished } from "@/utils";
 import { allPosts } from "contentlayer/generated";
 import { compareDesc } from "date-fns";
 import { Metadata } from "next";
@@ -14,9 +15,9 @@ export const metadata: Metadata = {
 };
 
 export default function TutorialsPage() {
-  const posts = allPosts.sort((a, b) =>
-    compareDesc(a.publishedAt, b.publishedAt),
-  );
+  const posts = allPosts
+    .filter(isPostPublished)
+    .sort((a, b) => compareDesc(a.publishedAt, b.publishedAt));
 
   return (
     <main className="flex-1">

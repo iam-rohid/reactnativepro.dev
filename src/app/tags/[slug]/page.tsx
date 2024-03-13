@@ -1,23 +1,19 @@
 import PostCard from "@/components/post-card";
 import { BASE_METADATA, SITE_NAME, SITE_URL } from "@/constants";
+import { isPostPublished } from "@/utils";
 import { allPosts, allTags } from "contentlayer/generated";
-import { compareDesc } from "date-fns";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import pluralize from "pluralize";
 
 type Props = { params: { slug: string } };
 
-const getTagBySlug = (slug: string) => {
-  return allTags.find((tag) => tag.slug === slug);
-};
-
 export const generateStaticParams = async () => {
   return allTags.map((tag) => ({ slug: tag.slug }));
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const tag = getTagBySlug(params.slug);
+  const tag = allTags.find((tag) => tag.slug === params.slug);
 
   if (!tag) {
     return {};
@@ -35,14 +31,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default function TagPage({ params }: Props) {
-  const tag = getTagBySlug(params.slug);
+  const tag = allTags.find((tag) => tag.slug === params.slug);
+
   if (!tag) {
     notFound();
   }
 
-  const posts = allPosts
-    .filter((post) => post.tags.includes(params.slug))
-    .sort((a, b) => compareDesc(a.publishedAt, b.publishedAt));
+  const posts = allPosts.filter(
+    (post) => isPostPublished(post) && post.tags.includes(tag.slug),
+  );
 
   return (
     <main className="flex-1">

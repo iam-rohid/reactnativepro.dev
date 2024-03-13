@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
-import { allPosts, allAuthors, allTags } from "contentlayer/generated";
 import { SITE_URL } from "@/constants";
-import { compareDesc } from "date-fns";
+import { allAuthors, allPosts, allTags } from "contentlayer/generated";
+import { isPostPublished } from "@/utils";
 
 const addPathToBaseURL = (path: string) => `${SITE_URL}${path}`;
 
@@ -12,9 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/tutorials",
     "/tags",
     ...allTags.map((item) => item.url),
-    ...allPosts
-      .sort((a, b) => compareDesc(a.publishedAt, b.publishedAt))
-      .map((item) => item.url),
+    ...allPosts.filter(isPostPublished).map((item) => item.url),
     ...allAuthors.map((item) => item.url),
   ].map((route) => ({
     url: addPathToBaseURL(route),
